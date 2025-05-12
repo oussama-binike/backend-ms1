@@ -1,15 +1,8 @@
-# Use a lightweight Alpine OpenJDK runtime as a base image
-FROM openjdk:17
+FROM maven:3.9.6-eclipse-temurin-21-alpine
+WORKDIR /app
+COPY pom.xml ./
+COPY . .
+RUN mvn verify -DskipTests=true -Dmaven.test.skip=true
+EXPOSE 5017
+CMD ["java","-jar","/app/target/gantour-0.0.1-SNAPSHOT.jar"]
 
-
-# Copy the packaged JAR file from the build stage
-COPY target/*.jar app.jar
-
-COPY zyn/ssl/localhost/keystore.p12 zyn/ssl/localhost/keystore.p12
-COPY zyn/ssl/prod/keystore.p12 zyn/ssl/prod/keystore.p12
-
-# Expose the port
-EXPOSE 8036
-
-# Define the command to run the application
-CMD ["java", "-jar", "app.jar"]
