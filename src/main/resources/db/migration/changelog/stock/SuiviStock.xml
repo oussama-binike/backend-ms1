@@ -1,0 +1,83 @@
+<!-- db/changelog-1.1-container.xml -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+  <!-- Create Container Table -->
+    <changeSet id="1" author="your-name">
+    <createTable tableName="suivi_stock">
+      <column name="id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+        <column name="code" type="VARCHAR(500)"/>
+        <column name="libelle" type="VARCHAR(500)"/>
+        <column name="description" type="VARCHAR(500)"/>
+        <column name="volume_reel" type="NUMERIC"/>
+        <column name="volume_estime" type="NUMERIC"/>
+        <column name="date_flux" type="TIMESTAMP"/>
+        <column name="repere_source_debut" type="BIGINT"/>
+        <column name="repere_source_fin" type="BIGINT"/>
+        <column name="repere_destination_debut" type="BIGINT"/>
+        <column name="repere_destination_fin" type="BIGINT"/>
+        <column name="position_roue_pelle" type="BIGINT"/>
+        <column name="position_stacker" type="BIGINT"/>
+
+        <column name="liaison_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+        <column name="scenario_flux_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+
+    </createTable>
+  </changeSet>
+
+    <!-- Add foreign key constraint -->
+  <changeSet id="2" author="your-name">
+      <addForeignKeyConstraint
+              baseTableName="suivi_stock"
+              baseColumnNames="liaison_id"
+              referencedTableName="liaison"
+              referencedColumnNames="id"
+              constraintName="fk_suivi_stock_liaison"/>
+      <addForeignKeyConstraint
+              baseTableName="suivi_stock"
+              baseColumnNames="scenario_flux_id"
+              referencedTableName="scenario_flux"
+              referencedColumnNames="id"
+              constraintName="fk_suivi_stock_scenario_flux"/>
+
+  </changeSet>
+
+    <!-- Create Sequence for ContainerType -->
+  <changeSet id="3" author="your-name">
+    <createSequence sequenceName="suivi_stock_seq" startValue="1" incrementBy="1"/>
+  </changeSet>
+
+  <!-- Load Data from CSV -->
+  <changeSet id="4" author="your-name">
+    <loadData
+            file="classpath:/db/migration/data/stock/SuiviStock.csv"
+            tableName="suivi_stock">
+      <column name="id" type="NUMERIC"/>
+          <column name="code" type="STRING"/>
+          <column name="libelle" type="STRING"/>
+          <column name="description" type="STRING"/>
+          <column name="volume_reel" type="NUMERIC"/>
+          <column name="volume_estime" type="NUMERIC"/>
+          <column name="date_flux" type="TIMESTAMP"/>
+          <column name="repere_source_debut" type="NUMERIC"/>
+          <column name="repere_source_fin" type="NUMERIC"/>
+          <column name="repere_destination_debut" type="NUMERIC"/>
+          <column name="repere_destination_fin" type="NUMERIC"/>
+          <column name="position_roue_pelle" type="NUMERIC"/>
+          <column name="position_stacker" type="NUMERIC"/>
+        <column name="liaison" type="BIGINT"/>
+        <column name="scenario_flux" type="BIGINT"/>
+    </loadData>
+  </changeSet>
+
+
+</databaseChangeLog>

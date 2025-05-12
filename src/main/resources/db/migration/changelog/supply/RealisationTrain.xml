@@ -1,0 +1,113 @@
+<!-- db/changelog-1.1-container.xml -->
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+
+  <!-- Create Container Table -->
+    <changeSet id="1" author="your-name">
+    <createTable tableName="realisation_train">
+      <column name="id" type="BIGINT">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+        <column name="code" type="VARCHAR(500)"/>
+        <column name="libelle" type="VARCHAR(500)"/>
+        <column name="description" type="VARCHAR(500)"/>
+        <column name="jour" type="TIMESTAMP"/>
+        <column name="taux_completude" type="NUMERIC"/>
+        <column name="taux_remplissage" type="NUMERIC"/>
+        <column name="taux_chargement" type="NUMERIC"/>
+        <column name="temps_chargement" type="VARCHAR(500)"/>
+        <column name="temps_dechargement" type="VARCHAR(500)"/>
+        <column name="temps_transite" type="NUMERIC"/>
+        <column name="expedie" type="TINYINT"/>
+        <column name="planifie" type="TINYINT"/>
+
+        <column name="provennance_train_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+        <column name="destination_train_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+        <column name="train_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+        <column name="type_wagon_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+        <column name="stade_operatoire_id" type="BIGINT">
+          <constraints nullable="false"/>
+        </column>
+
+    </createTable>
+  </changeSet>
+
+    <!-- Add foreign key constraint -->
+  <changeSet id="2" author="your-name">
+      <addForeignKeyConstraint
+              baseTableName="realisation_train"
+              baseColumnNames="provennance_train_id"
+              referencedTableName="provennance_train"
+              referencedColumnNames="id"
+              constraintName="fk_realisation_train_provennance_train"/>
+      <addForeignKeyConstraint
+              baseTableName="realisation_train"
+              baseColumnNames="destination_train_id"
+              referencedTableName="destination_train"
+              referencedColumnNames="id"
+              constraintName="fk_realisation_train_destination_train"/>
+      <addForeignKeyConstraint
+              baseTableName="realisation_train"
+              baseColumnNames="train_id"
+              referencedTableName="train"
+              referencedColumnNames="id"
+              constraintName="fk_realisation_train_train"/>
+      <addForeignKeyConstraint
+              baseTableName="realisation_train"
+              baseColumnNames="type_wagon_id"
+              referencedTableName="type_wagon"
+              referencedColumnNames="id"
+              constraintName="fk_realisation_train_type_wagon"/>
+      <addForeignKeyConstraint
+              baseTableName="realisation_train"
+              baseColumnNames="stade_operatoire_id"
+              referencedTableName="stade_operatoire"
+              referencedColumnNames="id"
+              constraintName="fk_realisation_train_stade_operatoire"/>
+
+  </changeSet>
+
+    <!-- Create Sequence for ContainerType -->
+  <changeSet id="3" author="your-name">
+    <createSequence sequenceName="realisation_train_seq" startValue="1" incrementBy="1"/>
+  </changeSet>
+
+  <!-- Load Data from CSV -->
+  <changeSet id="4" author="your-name">
+    <loadData
+            file="classpath:/db/migration/data/supply/RealisationTrain.csv"
+            tableName="realisation_train">
+      <column name="id" type="NUMERIC"/>
+          <column name="code" type="STRING"/>
+          <column name="libelle" type="STRING"/>
+          <column name="description" type="STRING"/>
+          <column name="jour" type="TIMESTAMP"/>
+          <column name="taux_completude" type="NUMERIC"/>
+          <column name="taux_remplissage" type="NUMERIC"/>
+          <column name="taux_chargement" type="NUMERIC"/>
+          <column name="temps_chargement" type="STRING"/>
+          <column name="temps_dechargement" type="STRING"/>
+          <column name="temps_transite" type="NUMERIC"/>
+          <column name="expedie" type="BOOLEAN"/>
+          <column name="planifie" type="BOOLEAN"/>
+        <column name="provennance_train" type="BIGINT"/>
+        <column name="destination_train" type="BIGINT"/>
+        <column name="train" type="BIGINT"/>
+        <column name="type_wagon" type="BIGINT"/>
+        <column name="stade_operatoire" type="BIGINT"/>
+    </loadData>
+  </changeSet>
+
+
+</databaseChangeLog>
